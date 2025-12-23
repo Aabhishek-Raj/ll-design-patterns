@@ -11,7 +11,7 @@ class Chai {
 
 const masalaChai = new Chai("Ginger", 10)
 masalaChai.flavour = 'greeni'
-console.log(masalaChai)
+// console.log(masalaChai)
 
 
 // Access Modifier 
@@ -52,6 +52,6 @@ class WebDev extends Coder {
 }
 
 const sara = new WebDev('Hp', 'Sara Dev', 'Rock', 3)
-console.log(sara)
+// console.log(sara)
 // console.log(sara.lang) // 'lang' is protected and only accessible within class 'Coder' and its subclasses.
 // sara.name = 'new' // Cannot assign to 'name' because it is a read-only property.
