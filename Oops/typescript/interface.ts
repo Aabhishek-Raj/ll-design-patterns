@@ -57,7 +57,7 @@ class Bands {
         this.dataState = []
     }
 
-    public get data(): string[] {
+    public get data(): string[] { 
         return this.dataState
     }
     public set data(value: string[]) {
