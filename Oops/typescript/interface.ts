@@ -28,7 +28,8 @@ class Peeps {
     static count: number = 0;
 
     static getCount(): number {
-        return Peeps.count
+        // return Peeps.count // subclassing would break.
+        return this.count // Inside a static method: this === Peeps
     }
 
     public id: number
@@ -38,6 +39,13 @@ class Peeps {
         this.id = ++Peeps.count
     }
 }
+
+class Admin extends Peeps {}
+const admin = new Admin('Sudhi')
+const admin2 = new Admin('Sudhi2')
+console.log("Admin Result: ", admin)
+console.log("Admin Result: ", admin2)
+console.log(Admin.getCount())
 
 
 const john = new Peeps('John')

@@ -2,3 +2,5 @@ DesignPatternTS
 node_modules
 database
 dist
+.parcel-cache
+*lock.json
