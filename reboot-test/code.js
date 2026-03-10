@@ -105,3 +105,90 @@ async function retry(fn, retries) {
 function sleep(time) {
     return new Promise(resolve => setTimeout(resolve, time))
 }
+
+// In-Memory Job Queue
+class JobQueue {
+  static queue = []
+  static workers = new Map()
+  static processing = false
+
+  static registerWorker(type, handler) {
+    this.workers.set(type, handler)
+  }
+
+  static addJob(type, payload) {
+    this.queue.push({ type, payload })
+    this.processJobs()
+  }
+
+  static async processJobs() {
+    if (this.processing) return
+
+    this.processing = true
+
+    while (this.queue.length > 0) {
+      const job = this.queue.shift()
+
+      const handler = this.workers.get(job.type)
+
+      if (!handler) {
+        console.log("No worker for job type:", job.type)
+        continue
+      }
+
+      try {
+        await handler(job.payload)
+      } catch (err) {
+        console.error("Job failed:", err)
+      }
+    }
+
+    this.processing = false
+  }
+}
+
+//usage 
+JobQueue.registerWorker("send-email", async (payload) => {
+  console.log("Sending email to", payload.to)
+})
+
+JobQueue.addJob("send-email", { to: "a@test.com" })
+JobQueue.addJob("send-email", { to: "b@test.com" })
+
+
+
+// Event Emitter
+class EventEmitter {
+  events = new Map()
+
+  on(type, handler) {
+    let handlers = this.events.get(type)
+
+    if (!handlers) {
+      handlers = []
+      this.events.set(type, handlers)
+    }
+
+    handlers.push(handler)
+  }
+
+  emit(type, data) {
+    const handlers = this.events.get(type)
+
+    if (!handlers) return
+
+    for (const handler of handlers) {
+      handler(data)
+    }
+  }
+
+  off(type, handler) {
+    const handlers = this.events.get(type)
+
+    if (!handlers) return
+
+    const filtered = handlers.filter(h => h !== handler)
+
+    this.events.set(type, filtered)
+  }
+}

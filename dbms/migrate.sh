@@ -1,0 +1,1 @@
+psql -U postgres -f migrations/001_create_users.sql
